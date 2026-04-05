@@ -5,7 +5,7 @@ import { useFetchProducts } from '../hooks/useFetchProducts.js';
 
 const ProductList = () => {
   const searchQuery = useSelector((state) => state.cart?.search || '');
-  const { products, loading, error } = useFetchProducts();
+  const { products, loading, error, retry } = useFetchProducts();
 
   // Memoized filtered list
   const filteredProducts = products.filter(product =>
@@ -29,22 +29,22 @@ const ProductList = () => {
       </section>
     );
   }
-if (error) {
-  return (
-    <section className="product-list error">
-      <h2>😞 Load Failed</h2>
-      <p>{error}</p>
-      <div className="error-actions">
+  if (error) {
+    return (
+      <section className="product-list error">
+        <h2>😞 Load Failed</h2>
+        <p>{error}</p>
+        <div className="error-actions">
         <button onClick={() => retry()} className="retry-btn">
-          🔄 Retry
-        </button>
-        <button onClick={() => window.location.reload()} className="hard-reload">
-          💾 Reload Page
-        </button>
-      </div>
-    </section>
-  );
-}
+            🔄 Retry
+          </button>
+          <button onClick={() => window.location.reload()} className="hard-reload">
+            💾 Reload Page
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="product-list">
@@ -56,8 +56,8 @@ if (error) {
       ) : (
         <div className="products-grid">
           {filteredProducts.map(product => (
-            <ProductItem 
-              key={product.id} 
+            <ProductItem
+              key={product.id}
               product={product}
             />
           ))}

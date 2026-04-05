@@ -14,7 +14,7 @@ export const useFetchProducts = () => {
       const controller = new AbortController();
       const { signal } = controller;
       
-      const response = await fetch('https://dummyjson1.com/products?limit=20', {
+      const response = await fetch('https://dummyjson.com/products?limit=20', {
         signal,
         cache: 'no-cache'
       });
