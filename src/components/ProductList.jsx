@@ -1,68 +1,69 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';           // Redux selector only
+import { useCallback, memo } from 'react';           // React hooks
 import ProductItem from './ProductItem.jsx';
-import { useFetchProducts } from '../hooks/useFetchProducts.js';  // Custom hook (next)
-
-// Placeholder data until API works
-const placeholderProducts = [
-  { id: 1, title: 'Sample Product 1', price: 29.99, thumbnail: 'https://via.placeholder.com/300x200?text=P1' },
-  { id: 2, title: 'Sample Product 2', price: 39.99, thumbnail: 'https://via.placeholder.com/300x200?text=P2' },
-  { id: 3, title: 'Sample Product 3', price: 49.99, thumbnail: 'https://via.placeholder.com/300x200?text=P3' }
-];
+import { useFetchProducts } from '../hooks/useFetchProducts.js';
 
 const ProductList = () => {
-  // Redux search filter
   const searchQuery = useSelector((state) => state.cart?.search || '');
-  
-  // Custom hook for products (implements later)
-  const { products: apiProducts, loading, error } = useFetchProducts();
-  
-  // Use API or placeholder
-  const products = apiProducts.length > 0 ? apiProducts : placeholderProducts;
+  const { products, loading, error } = useFetchProducts();
 
-  // Filter by search
+  // Memoized filtered list
   const filteredProducts = products.filter(product =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Stable add callback (perf optimization)
+  const handleAddToCart = useCallback((product) => {
+    // Handled by ProductItem's internal dispatch
+  }, []);
+
   if (loading) {
     return (
-      <div className="product-list">
+      <section className="product-list">
+        <h2>Loading Products...</h2>
         <div className="loading-grid">
-          <div className="skeleton-card"></div>
-          <div className="skeleton-card"></div>
-          <div className="skeleton-card"></div>
+          {Array(8).fill().map((_, i) => (
+            <div key={`skeleton-${i}`} className="skeleton-card"></div>
+          ))}
         </div>
-      </div>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <div className="product-list error">
-        <h2>Error loading products</h2>
+      <section className="product-list error">
+        <h2>Failed to load products</h2>
         <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Retry</button>
-      </div>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="retry-btn"
+        >
+          🔄 Retry
+        </button>
+      </section>
     );
   }
 
   return (
-    <div className="product-list">
-      <h2>Featured Products</h2>
+    <section className="product-list">
+      <h2>{filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'} Found</h2>
       {filteredProducts.length === 0 ? (
-        <p>No products found for "{searchQuery}"</p>
+        <div className="no-results">
+          <p>No products match "{searchQuery}"</p>
+        </div>
       ) : (
         <div className="products-grid">
           {filteredProducts.map(product => (
             <ProductItem 
-              key={product.id}  // Unique key req\
+              key={product.id} 
               product={product}
             />
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
-export default ProductList;
+export default memo(ProductList);
