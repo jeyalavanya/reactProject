@@ -1,37 +1,70 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { setSearch } from '../redux/cartSlice.js';  // Redux action for search
 
 const Header = () => {
-  const [search, setSearch] = useState('');
-  const cartItems = useSelector((state) => state.cart?.items?.length || 0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSearch = (e) => {
+  // Redux selectors for cart count and current search
+  const cartItemCount = useSelector((state) => 
+    state.cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0
+  );
+  const currentSearch = useSelector((state) => state.cart?.search || '');
+
+  // Sync local state with Redux search
+  useEffect(() => {
+    setSearchQuery(currentSearch);
+  }, [currentSearch]);
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    dispatch(setSearch(query));  // Update Redux for ProductList filter
+  };
+
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
-    // Redux dispatch search action here later
-    navigate('/');
+    navigate('/');  // Redirect to home with filtered products
   };
 
   return (
     <header className="header">
       <div className="container">
+        {/* Logo / Brand */}
         <Link to="/" className="logo">
-          ShoppyGlobe
+          🛒 ShoppyGlobe
         </Link>
-        <nav className="nav">
-          <form onSubmit={handleSearch} className="search-form">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search products..."
-            />
-          </form>
-          <Link to="/cart" className="cart-link">
-            Cart ({cartItems})
-          </Link>
+
+        {/* Navigation Menu */}
+        <nav className="nav-menu">
+          <Link to="/" className="nav-link">Home</Link>
+          <Link to="/cart" className="nav-link">Cart</Link>
         </nav>
+
+        {/* Search Form - for Redux search feature */}
+        <form onSubmit={handleSearchSubmit} className="search-form">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search products..."
+            className="search-input"
+          />
+        </form>
+
+        {/* Shopping Cart Icon with Badge */}
+        <Link to="/cart" className="cart-icon-link">
+          <div className="cart-icon">
+            🛍️
+            {cartItemCount > 0 && (
+              <span className="cart-badge">{cartItemCount}</span>
+            )}
+          </div>
+          <span className="cart-text">Cart</span>
+        </Link>
       </div>
     </header>
   );
