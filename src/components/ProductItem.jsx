@@ -10,9 +10,7 @@ const ProductItem = ({ product }) => {
 
   const handleAddToCart = (event) => {
     dispatch(addToCart(product));
-    
-    // Visual feedback on THIS button only
-    const btn = event.currentTarget;
+        const btn = event.currentTarget;
     const originalText = btn.innerHTML;
     btn.innerHTML = 'Added! 🔔';
     btn.style.background = '#27ae60';

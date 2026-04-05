@@ -29,21 +29,22 @@ const ProductList = () => {
       </section>
     );
   }
-
-  if (error) {
-    return (
-      <section className="product-list error">
-        <h2>Failed to load products</h2>
-        <p>{error}</p>
-        <button 
-          onClick={() => window.location.reload()} 
-          className="retry-btn"
-        >
+if (error) {
+  return (
+    <section className="product-list error">
+      <h2>😞 Load Failed</h2>
+      <p>{error}</p>
+      <div className="error-actions">
+        <button onClick={() => retry()} className="retry-btn">
           🔄 Retry
         </button>
-      </section>
-    );
-  }
+        <button onClick={() => window.location.reload()} className="hard-reload">
+          💾 Reload Page
+        </button>
+      </div>
+    </section>
+  );
+}
 
   return (
     <section className="product-list">

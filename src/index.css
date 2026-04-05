@@ -364,3 +364,15 @@
     gap: 0.25rem;
   }
 }
+
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.hard-reload {
+  background: #e74c3c;
+}

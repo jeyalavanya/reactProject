@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header.jsx';
 
-// Lazy load all pages for performance optimization (20 marks req)
+// Lazy load all pages for performance optimization
 const Home = lazy(() => import('./pages/Home.jsx'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail.jsx'));
 const CartPage = lazy(() => import('./pages/Cart.jsx'));
