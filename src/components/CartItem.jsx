@@ -12,9 +12,18 @@ const CartItem = ({ item }) => {
         <p>${item.price}</p>
       </div>
       <div className="quantity">
-        <button onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity - 1 }))}>−</button>
+        <button
+          onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity - 1 }))}
+          disabled={item.quantity <= 1}
+        >
+          -
+        </button>
         <span>{item.quantity}</span>
-        <button onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }))}>+</button>
+        <button
+          onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }))}
+        >
+          +
+        </button>
       </div>
       <button onClick={() => dispatch(removeFromCart(item.id))}>Remove</button>
     </div>
