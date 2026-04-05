@@ -1,6 +1,6 @@
 /* ========================================
-   PRODUCT LIST - FULLY RESPONSIVE
-======================================= */
+   PRODUCT LIST - FULLY RESPONSIVE 
+======================================== */
 .product-list {
   padding: 2rem 1rem;
   max-width: 1400px;
@@ -38,7 +38,7 @@
   box-shadow: 0 25px 60px rgba(0,0,0,0.15);
 }
 
-/* Image Perfection */
+/* Image Responsive */
 .product-image-wrapper {
   height: clamp(200px, 30vw, 250px);
   overflow: hidden;
@@ -134,4 +134,91 @@
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
 }
+/* HEADER - BULLETPROOF RESPONSIVE */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+}
 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: 70px;  /* Fixed height */
+}
+
+/* LOGO */
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+/* NAV */
+.nav-menu {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+
+.nav-link:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* SEARCH */
+.search-form {
+  flex: 1;
+  max-width: 400px;
+  margin: 0 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+}
+
+/* CART */
+.cart-icon-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.cart-icon-link:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.cart-icon {
+  font-size: 1.8rem;
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: #ff4757;
+}
