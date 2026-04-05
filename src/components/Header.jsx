@@ -14,7 +14,7 @@ const Header = () => {
   );
   const currentSearch = useSelector((state) => state.cart?.search || '');
 
-  // Sync local state with Redux search
+  // Sync local state with Redux search so the input stays updated.
   useEffect(() => {
     setSearchQuery(currentSearch);
   }, [currentSearch]);

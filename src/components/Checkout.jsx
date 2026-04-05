@@ -6,10 +6,11 @@ import { clearCart } from '../redux/cartSlice';
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // Pull cart items from Redux and compute the order total.
   const cartItems = useSelector((state) => state.cart.items || []);
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-  // Checkout form state
+  // Local form state for checkout details.
   const [formData, setFormData] = useState({ name: '', email: '', address: '' });
 
   const handleSubmit = (e) => {

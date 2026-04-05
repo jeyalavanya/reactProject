@@ -10,6 +10,7 @@ const Cart = () => {
   // Sum up price * quantity for every item in the cart.
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
+  // Show an empty state when there are no items in the cart.
   if (cartItems.length === 0) {
     return (
       <div className="empty-cart">

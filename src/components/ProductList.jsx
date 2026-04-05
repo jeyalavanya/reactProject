@@ -7,14 +7,14 @@ const ProductList = () => {
   const searchQuery = useSelector((state) => state.cart?.search || '');
   const { products, loading, error, retry } = useFetchProducts();
 
-  // Memoized filtered list
+  // Filter products by the search query stored in Redux.
   const filteredProducts = products.filter(product =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Stable add callback (perf optimization)
+  // Placeholder callback to preserve stable function identity for child components.
   const handleAddToCart = useCallback((product) => {
-    // Handled by ProductItem's internal dispatch
+    // Actual add-to-cart behavior is handled inside ProductItem.
   }, []);
 
   if (loading) {

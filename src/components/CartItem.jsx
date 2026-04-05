@@ -6,12 +6,14 @@ const CartItem = ({ item }) => {
 
   return (
     <div className="cart-item">
+      {/* Product thumbnail for the item in the cart */}
       <img src={item.thumbnail} alt={item.title} loading="lazy" />
       <div>
         <h3>{item.title}</h3>
         <p>${item.price}</p>
       </div>
       <div className="quantity">
+        {/* Decrease quantity, but never below 1 */}
         <button
           onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity - 1 }))}
           disabled={item.quantity <= 1}
@@ -19,6 +21,7 @@ const CartItem = ({ item }) => {
           -
         </button>
         <span>{item.quantity}</span>
+        {/* Increase quantity by 1 */}
         <button
           onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }))}
         >

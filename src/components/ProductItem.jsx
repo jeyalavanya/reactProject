@@ -27,6 +27,7 @@ const ProductItem = ({ product }) => {
   return (
     <Link to={`/product/${product.id}`}>
     <article className="product-card">
+      {/* Product image uses lazy loading for better page performance */}
       <div className="product-image-wrapper">
         <LazyLoadImage
           src={product.thumbnail}
