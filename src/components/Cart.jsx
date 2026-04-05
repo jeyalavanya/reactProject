@@ -3,8 +3,11 @@ import CartItem from '../components/CartItem';
 import { Link } from 'react-router-dom';
 
 const Cart = () => {
+  // Read cart items from the Redux store. If the cart slice is not initialized,
+  // default to an empty array to avoid errors during rendering.
   const cartItems = useSelector((state) => state.cart.items || []);
 
+  // Sum up price * quantity for every item in the cart.
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   if (cartItems.length === 0) {
@@ -19,9 +22,12 @@ const Cart = () => {
   return (
     <div className="cart">
       <h1>Shopping Cart</h1>
+
+      {/* Render a CartItem for every item in the cart */}
       {cartItems.map((item) => (
         <CartItem key={item.id} item={item} />
       ))}
+
       <div className="cart-total">
         <h2>Total: ${total.toFixed(2)}</h2>
         <Link to="/checkout">Proceed to Checkout</Link>

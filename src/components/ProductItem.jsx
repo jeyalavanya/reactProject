@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
 
+  // Dispatch add-to-cart action and provide instant button feedback.
   const handleAddToCart = (event) => {
     dispatch(addToCart(product));
         const btn = event.currentTarget;

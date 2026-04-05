@@ -25,6 +25,7 @@ const CartItem = ({ item }) => {
           +
         </button>
       </div>
+      {/* Remove the item from cart completely */}
       <button onClick={() => dispatch(removeFromCart(item.id))}>Remove</button>
     </div>
   );

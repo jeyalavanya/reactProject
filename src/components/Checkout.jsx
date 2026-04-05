@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { clearCart } from '../redux/cartSlice';
 
 const Checkout = () => {
@@ -10,6 +9,7 @@ const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.items || []);
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
+  // Checkout form state
   const [formData, setFormData] = useState({ name: '', email: '', address: '' });
 
   const handleSubmit = (e) => {

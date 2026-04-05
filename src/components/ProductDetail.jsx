@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/cartSlice';
 
 const ProductDetail = () => {
+  // Read the product id from the route parameter.
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const ProductDetail = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Fetch details for the selected product when the id changes.
     fetchProduct();
   }, [id]);
 
