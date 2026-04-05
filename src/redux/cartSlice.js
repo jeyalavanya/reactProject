@@ -8,6 +8,7 @@ const initialState = {
   totalAmount: 0
 };
 
+// Create Redux slice for cart state and actions.
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -69,7 +70,7 @@ const cartSlice = createSlice({
   }
 });
 
-// Export all actions
+// Export all actions for dispatching cart updates
 export const { 
   addToCart, 
   removeFromCart, 
@@ -78,7 +79,7 @@ export const {
   clearCart 
 } = cartSlice.actions;
 
-// Selectors for useSelector
+// Selectors for useSelector hooks in components
 export const selectCartItems = (state) => state.cart.items;
 export const selectTotalItems = (state) => state.cart.totalItems;
 export const selectTotalAmount = (state) => state.cart.totalAmount;
