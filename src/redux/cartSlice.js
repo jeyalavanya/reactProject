@@ -55,7 +55,7 @@ const cartSlice = createSlice({
       }
     },
 
-    // Search filter for ProductList (20 marks)
+    // Search filter for ProductList
     setSearch: (state, action) => {
       state.search = action.payload;
     },
