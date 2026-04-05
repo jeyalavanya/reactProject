@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/cartSlice.js';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { Link } from 'react-router-dom';
+
 
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
@@ -22,6 +24,7 @@ const ProductItem = ({ product }) => {
   };
 
   return (
+    <Link to={`/product/${product.id}`}>
     <article className="product-card">
       <div className="product-image-wrapper">
         <LazyLoadImage
@@ -62,6 +65,7 @@ const ProductItem = ({ product }) => {
         </button>
       </div>
     </article>
+    </Link>
   );
 };
 
