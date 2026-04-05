@@ -7,15 +7,11 @@ export const useFetchProducts = () => {
   const [error, setError] = useState(null);
 
   // Memoized retry function avoids recreating the callback on every render.
-  const retryFetch = useCallback(async () => {
+  const retryFetch = useCallback(async (signal) => {
     try {
       setError(null);
       setLoading(true);
       
-      const controller = new AbortController();
-      const { signal } = controller;
-      
-      // Use AbortController so the fetch can be canceled if needed.
       const response = await fetch('https://dummyjson.com/products?limit=20', {
         signal,
         cache: 'no-cache'
@@ -39,11 +35,11 @@ export const useFetchProducts = () => {
 
   useEffect(() => {
     // Fetch products once when the hook is mounted.
-    retryFetch();
+    const controller = new AbortController();
+    retryFetch(controller.signal);
     
-    // Return a cleanup function if future enhancements add cancellable logic.
-    return () => {}; 
+    return () => controller.abort();
   }, [retryFetch]);
 
-  return { products, loading, error, retry: retryFetch };
+  return { products, loading, error, retry: () => retryFetch() };
 };

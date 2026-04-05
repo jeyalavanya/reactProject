@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { clearCart } from '../redux/cartSlice';
+import { clearCart, selectTotalAmount } from '../redux/cartSlice';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // Pull cart items from Redux and compute the order total.
-  const cartItems = useSelector((state) => state.cart.items || []);
-  const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const total = useSelector(selectTotalAmount) || 0;
 
   // Local form state for checkout details.
   const [formData, setFormData] = useState({ name: '', email: '', address: '' });

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';           // Redux selector only
-import { useCallback, memo } from 'react';           // React hooks
+import { useMemo, memo } from 'react';           // React hooks
 import ProductItem from './ProductItem.jsx';
 import { useFetchProducts } from '../hooks/useFetchProducts.js';
 
@@ -8,14 +8,11 @@ const ProductList = () => {
   const { products, loading, error, retry } = useFetchProducts();
 
   // Filter products by the search query stored in Redux.
-  const filteredProducts = products.filter(product =>
-    product.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Placeholder callback to preserve stable function identity for child components.
-  const handleAddToCart = useCallback((product) => {
-    // Actual add-to-cart behavior is handled inside ProductItem.
-  }, []);
+  const filteredProducts = useMemo(() => (
+    products.filter(product =>
+      product.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  ), [products, searchQuery]);
 
   if (loading) {
     return (

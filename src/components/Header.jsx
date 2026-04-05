@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { setSearch } from '../redux/cartSlice.js';  // Redux action for search
+import { setSearch, selectTotalItems, selectSearchQuery } from '../redux/cartSlice.js';  // Redux selectors and action
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -9,10 +9,8 @@ const Header = () => {
   const navigate = useNavigate();
 
   // Redux selectors for cart count and current search
-  const cartItemCount = useSelector((state) => 
-    state.cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0
-  );
-  const currentSearch = useSelector((state) => state.cart?.search || '');
+  const cartItemCount = useSelector(selectTotalItems) || 0;
+  const currentSearch = useSelector(selectSearchQuery) || '';
 
   // Sync local state with Redux search so the input stays updated.
   useEffect(() => {

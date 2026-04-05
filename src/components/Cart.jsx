@@ -1,14 +1,12 @@
 import { useSelector } from 'react-redux';
 import CartItem from '../components/CartItem';
 import { Link } from 'react-router-dom';
+import { selectCartItems, selectTotalAmount } from '../redux/cartSlice';
 
 const Cart = () => {
-  // Read cart items from the Redux store. If the cart slice is not initialized,
-  // default to an empty array to avoid errors during rendering.
-  const cartItems = useSelector((state) => state.cart.items || []);
-
-  // Sum up price * quantity for every item in the cart.
-  const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  // Read cart items and precomputed total from Redux store.
+  const cartItems = useSelector(selectCartItems) || [];
+  const total = useSelector(selectTotalAmount) || 0;
 
   // Show an empty state when there are no items in the cart.
   if (cartItems.length === 0) {

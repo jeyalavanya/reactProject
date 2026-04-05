@@ -9,6 +9,11 @@ const initialState = {
 };
 
 // Create Redux slice for cart state and actions.
+const calculateTotals = (items) => ({
+  totalItems: items.reduce((sum, item) => sum + item.quantity, 0),
+  totalAmount: items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+});
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -28,8 +33,7 @@ const cartSlice = createSlice({
       }
       
       // Update totals
-      state.totalItems = state.items.reduce((sum, item) => sum + item.quantity, 0);
-      state.totalAmount = state.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      Object.assign(state, calculateTotals(state.items));
     },
 
     // Remove product from cart completely
@@ -38,8 +42,7 @@ const cartSlice = createSlice({
       state.items = state.items.filter(item => item.id !== productId);
       
       // Recalculate totals
-      state.totalItems = state.items.reduce((sum, item) => sum + item.quantity, 0);
-      state.totalAmount = state.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      Object.assign(state, calculateTotals(state.items));
     },
 
     // Update quantity (min 1)
@@ -48,11 +51,10 @@ const cartSlice = createSlice({
       const item = state.items.find(item => item.id === id);
       
       if (item) {
-        item.quantity = Math.max(1, parseInt(quantity));
+        item.quantity = Math.max(1, parseInt(quantity, 10));
         
         // Recalculate totals
-        state.totalItems = state.items.reduce((sum, item) => sum + item.quantity, 0);
-        state.totalAmount = state.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        Object.assign(state, calculateTotals(state.items));
       }
     },
 
