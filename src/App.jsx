@@ -4,9 +4,9 @@ import Header from './components/Header.jsx';
 
 // Lazy load all pages for performance optimization
 const Home = lazy(() => import('./pages/Home.jsx'));
-const ProductDetail = lazy(() => import('./pages/ProductDetail.jsx'));
-const CartPage = lazy(() => import('./pages/Cart.jsx'));
-const Checkout = lazy(() => import('./pages/Checkout.jsx'));
+const ProductDetail = lazy(() => import('./components/ProductDetail.jsx'));
+const CartPage = lazy(() => import('./components/Cart.jsx'));
+const Checkout = lazy(() => import('./components/Checkout.jsx'));
 const NotFound = lazy(() => import('./components/NotFound.jsx'));
 
 function App() {
