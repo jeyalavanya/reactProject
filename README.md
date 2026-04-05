@@ -1,16 +1,32 @@
-# React + Vite
+# ShoppyGlobe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite eCommerce starter project for shopping cart and checkout functionality.
 
-Currently, two official plugins are available:
+Repository: https://github.com/jeyalavanya/reactProject.git
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Project Overview
 
-## React Compiler
+This repository contains a small eCommerce app built with React, Vite, Redux Toolkit, and React Router.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Features:
+- Product listing with search filtering
+- Shopping cart with quantity updates and item removal
+- Checkout page with order summary
+- Lazy-loaded routes and responsive layout
 
-## Expanding the ESLint configuration
+## Run locally
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+
+## Notes
+
+- This project uses Vite as the build tool and bundler.
+- Redux Toolkit is used for cart state management.
+- The app is already configured with React Router.
