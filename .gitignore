@@ -1,4 +1,4 @@
 node_modules/
-.env
-*.docx
-.DS_Store
+#.env
+#*.docx
+#.DS_Store
