@@ -1,9 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-export default function Header({ onToggleSidebar }) {
+export default function Header({ onToggleSidebar, onSearch, searchTerm }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+
+  const handleSearchChange = (e) => {
+    if (onSearch) {
+      onSearch(e.target.value);
+    }
+  };
 
   return (
     <header className="header">
@@ -19,7 +25,12 @@ export default function Header({ onToggleSidebar }) {
       </div>
 
       <div className="header-center">
-        <input className="search-input" placeholder="Search" />
+        <input 
+          className="search-input" 
+          placeholder="Search" 
+          value={searchTerm || ''}
+          onChange={handleSearchChange}
+        />
       </div>
 
       <div className="header-right">

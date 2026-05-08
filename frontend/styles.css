@@ -155,6 +155,18 @@ input {
   gap: 22px;
 }
 
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.no-results p {
+  margin: 0;
+}
+
 .video-card {
   background: var(--card);
   border-radius: 16px;
