@@ -633,3 +633,495 @@ input {
 .video-card:hover {
   transform: scale(1.02);
 }
+
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ============================================ */
+
+/* Extra Large Screens (1920px and up) */
+@media (min-width: 1920px) {
+  .video-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .header {
+    padding: 16px 24px;
+    gap: 24px;
+  }
+
+  .main-content {
+    padding: 24px;
+  }
+
+  .video-detail-container {
+    padding: 24px;
+  }
+}
+
+/* Large Screens (1440px - 1919px) */
+@media (max-width: 1919px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .header {
+    grid-template-columns: 240px 1fr 160px;
+  }
+}
+
+/* Standard Laptops (1024px - 1439px) */
+@media (max-width: 1439px) {
+  .video-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .video-detail-container {
+    max-width: 100%;
+  }
+}
+
+/* Tablets & Small Laptops (768px - 1023px) */
+@media (max-width: 1023px) {
+  /* Header - Stack on smaller screens */
+  .header {
+    grid-template-columns: 50px 1fr 50px;
+    padding: 10px 12px;
+    gap: 12px;
+  }
+
+  .brand-text {
+    display: none;
+  }
+
+  .brand-logo {
+    font-size: 18px;
+  }
+
+  .search-input {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .signin-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  /* Sidebar - Collapsible */
+  .sidebar {
+    width: 200px;
+    padding: 12px 8px;
+  }
+
+  .sidebar-item {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+
+  /* Main Content */
+  .main-content {
+    padding: 12px;
+  }
+
+  .video-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .filter-bar {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .filter-chip {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .video-info {
+    padding: 10px;
+  }
+
+  .video-info h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .video-info p,
+  .video-info span {
+    font-size: 12px;
+  }
+
+  /* Video Detail */
+  .video-detail-container {
+    padding: 12px;
+  }
+
+  .video-title {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+
+  .video-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+
+  .action-buttons {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .like-button,
+  .dislike-button {
+    flex: 1;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .channel-name {
+    font-size: 14px;
+  }
+
+  .view-count {
+    font-size: 12px;
+  }
+
+  /* Comments */
+  .comment-section {
+    padding: 12px;
+    margin-top: 20px;
+  }
+
+  .comment-section h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .comment-item {
+    padding: 12px;
+  }
+
+  .comment-input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .comment-text {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+}
+
+/* Mobile (480px - 767px) - Phones */
+@media (max-width: 767px) {
+  body {
+    font-size: 14px;
+  }
+
+  /* Header - Mobile */
+  .header {
+    grid-template-columns: 40px 1fr 40px;
+    padding: 8px 10px;
+    gap: 8px;
+    height: auto;
+  }
+
+  .header-center {
+    order: 3;
+    width: 100%;
+    grid-column: 1 / -1;
+    padding-top: 8px;
+  }
+
+  .search-input {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .signin-button {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  /* Sidebar - Hide by default on mobile */
+  .sidebar {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 60px;
+    bottom: 0;
+    width: 100%;
+    max-width: 250px;
+    z-index: 40;
+    padding: 12px 8px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .sidebar.visible {
+    display: flex;
+  }
+
+  .sidebar-hidden {
+    display: none;
+  }
+
+  /* Main Content - Full width */
+  .main-content {
+    padding: 8px;
+    width: 100%;
+  }
+
+  /* Video Grid - Single column on very small phones */
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  /* Filter Bar - Horizontal scroll */
+  .filter-bar {
+    overflow-x: auto;
+    gap: 6px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
+
+  .filter-chip {
+    padding: 6px 10px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .video-info {
+    padding: 8px;
+  }
+
+  .video-info h3 {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .video-info p,
+  .video-info span {
+    font-size: 11px;
+  }
+
+  .no-results {
+    padding: 30px 12px;
+    font-size: 14px;
+  }
+
+  /* Video Detail - Mobile */
+  .video-detail-container {
+    padding: 8px;
+    max-width: 100%;
+  }
+
+  .video-player {
+    margin-bottom: 12px;
+  }
+
+  .play-button {
+    font-size: 40px;
+  }
+
+  .video-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .video-meta {
+    padding: 12px;
+  }
+
+  .video-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+
+  .action-buttons {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .like-button,
+  .dislike-button {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .channel-name {
+    font-size: 13px;
+  }
+
+  .view-count {
+    font-size: 11px;
+  }
+
+  .video-description {
+    margin-top: 12px;
+  }
+
+  .video-description h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .video-description p {
+    font-size: 12px;
+  }
+
+  /* Comments - Mobile */
+  .comment-section {
+    padding: 12px;
+    margin-top: 16px;
+  }
+
+  .comment-section h2 {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .comment-form {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .comment-input {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .comment-submit {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .comment-item {
+    padding: 10px;
+  }
+
+  .comment-header {
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .comment-author {
+    font-size: 12px;
+  }
+
+  .comment-date {
+    font-size: 11px;
+  }
+
+  .comment-text {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .comment-actions {
+    gap: 6px;
+  }
+
+  .edit-btn,
+  .delete-btn,
+  .save-btn,
+  .cancel-btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .comment-edit-input {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  /* Auth Page - Mobile */
+  .google-form-card {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .google-form-card h1 {
+    font-size: 20px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+  }
+
+  .form-group input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .auth-submit-btn,
+  .toggle-auth-btn {
+    font-size: 12px;
+  }
+
+  .user-name {
+    display: none;
+  }
+}
+
+/* Extra Small (Up to 479px) - Small phones */
+@media (max-width: 479px) {
+  .header {
+    grid-template-columns: 35px 1fr 35px;
+    padding: 6px 8px;
+  }
+
+  .header-center {
+    padding-top: 6px;
+  }
+
+  .search-input {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .filter-bar {
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .filter-chip {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .video-title {
+    font-size: 16px;
+  }
+
+  .play-button {
+    font-size: 30px;
+  }
+
+  .comment-input {
+    min-height: 60px;
+  }
+
+  .comment-author {
+    font-size: 11px;
+  }
+
+  .comment-date {
+    font-size: 10px;
+  }
+}
