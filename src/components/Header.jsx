@@ -1,71 +1,21 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
-import { setSearch, selectTotalItems, selectSearchQuery } from '../redux/cartSlice.js';  // Redux selectors and action
-
-const Header = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  // Redux selectors for cart count and current search
-  const cartItemCount = useSelector(selectTotalItems) || 0;
-  const currentSearch = useSelector(selectSearchQuery) || '';
-
-  // Sync local state with Redux search so the input stays updated.
-  useEffect(() => {
-    setSearchQuery(currentSearch);
-  }, [currentSearch]);
-
-  const handleSearchChange = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    dispatch(setSearch(query));  // Update Redux for ProductList filter
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    navigate('/');  // Redirect to home with filtered products
-  };
-
+export default function Header({ onToggleSidebar }) {
   return (
     <header className="header">
-      <div className="container">
-        {/* Logo / Brand */}
-        <Link to="/" className="logo">
-          🛒 ShoppyGlobe
-        </Link>
-
-        {/* Navigation Menu */}
-        <nav className="nav-menu">
-          <Link to="/" className="nav-link">Home</Link>
-          <Link to="/cart" className="nav-link">Cart</Link>
-        </nav>
-
-        {/* Search Form - for Redux search feature */}
-        <form onSubmit={handleSearchSubmit} className="search-form">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            placeholder="Search products..."
-            className="search-input"
-          />
-        </form>
-
-        {/* Shopping Cart Icon with Badge */}
-        <Link to="/cart" className="cart-icon-link">
-          <div className="cart-icon">
-            🛍️
-            {cartItemCount > 0 && (
-              <span className="cart-badge">{cartItemCount}</span>
-            )}
-          </div>
-          <span className="cart-text">Cart</span>
-        </Link>
+      <div className="header-left">
+        <button className="icon-button" onClick={onToggleSidebar} aria-label="Toggle sidebar">
+          ☰
+        </button>
+        <div className="brand-wrap">
+          <span className="brand-logo">▶</span>
+          <span className="brand-text">YouTube</span>
+        </div>
+      </div>
+      <div className="header-center">
+        <input className="search-input" placeholder="Search" />
+      </div>
+      <div className="header-right">
+        <button className="signin-button">Sign in</button>
       </div>
     </header>
   );
-};
-
-export default Header;
+}
