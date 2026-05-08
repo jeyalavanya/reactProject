@@ -95,19 +95,19 @@ input {
 
 .sidebar {
   width: 230px;
+  min-width: 230px;
   padding: 16px 12px;
   border-right: 1px solid var(--border);
   background: #151515;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: width 0.2s ease, padding 0.2s ease;
+  transition: width 0.2s ease, padding 0.2s ease, min-width 0.2s ease;
 }
 
 .sidebar-hidden {
   width: 0;
-  padding: 0;
-  overflow: hidden;
+  min-width: 0;
   border-right: none;
 }
 
@@ -710,8 +710,22 @@ input {
 
   /* Sidebar - Collapsible */
   .sidebar {
-    width: 200px;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 230px;
+    max-width: 80%;
     padding: 12px 8px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 30;
+  }
+
+  .sidebar:not(.sidebar-hidden) {
+    transform: translateX(0);
   }
 
   .sidebar-item {
@@ -720,12 +734,17 @@ input {
   }
 
   /* Main Content */
+  .content-layout {
+    flex-direction: column;
+  }
+
   .main-content {
     padding: 12px;
+    width: 100%;
   }
 
   .video-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: 12px;
   }
 
@@ -848,28 +867,29 @@ input {
     font-size: 11px;
   }
 
-  /* Sidebar - Hide by default on mobile */
+  /* Sidebar - Mobile slide-in */
   .sidebar {
-    display: none;
+    display: flex;
     position: fixed;
     left: 0;
     top: 60px;
     bottom: 0;
-    width: 100%;
+    width: 80%;
     max-width: 250px;
     z-index: 40;
     padding: 12px 8px;
     border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
     background: var(--surface);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
   }
 
-  .sidebar.visible {
-    display: flex;
+  .sidebar:not(.sidebar-hidden) {
+    transform: translateX(0);
   }
 
   .sidebar-hidden {
-    display: none;
+    transform: translateX(-100%);
   }
 
   /* Main Content - Full width */
