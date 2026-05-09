@@ -36,6 +36,7 @@ textarea {
   align-items: center;
   gap: 16px;
   padding: 12px 20px;
+  min-height: 72px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
@@ -86,6 +87,7 @@ textarea {
   border-radius: 999px;
   background: #2a2a2a;
   color: white;
+  white-space: nowrap;
 }
 
 .brand-wrap {
@@ -593,21 +595,22 @@ textarea {
 @media (max-width: 900px) {
   .header {
     grid-template-areas: "left right" "center center";
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto;
     grid-template-rows: auto auto;
+    align-items: center;
   }
 
   .sidebar {
     position: fixed;
     left: 0;
-    top: 73px;
+    top: 72px;
     bottom: 0;
     z-index: 30;
   }
 
   .sidebar-overlay {
     position: fixed;
-    top: 73px;
+    top: 72px;
     left: 230px;
     right: 0;
     bottom: 0;
@@ -839,6 +842,15 @@ textarea {
   border: 1px solid var(--border);
   background: #191919;
   color: white;
+}
+
+.video-edit-form textarea {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #191919;
+  color: white;
+  resize: vertical;
 }
 
 @media (max-width: 900px) {
@@ -1330,7 +1342,7 @@ textarea {
 @media (max-width: 1023px) {
   /* Header - Stack on smaller screens */
   .header {
-    grid-template-columns: 50px 1fr 50px;
+    grid-template-columns: auto auto;
     padding: 10px 12px;
     gap: 12px;
   }
@@ -1353,10 +1365,20 @@ textarea {
     font-size: 12px;
   }
 
+  .channel-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .header-right {
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
   /* Sidebar - Collapsible */
   .sidebar {
     position: fixed;
-    top: 60px;
+    top: 72px;
     left: 0;
     bottom: 0;
     width: 230px;
@@ -1489,7 +1511,7 @@ textarea {
 
   /* Header - Mobile */
   .header {
-    grid-template-columns: 40px 1fr 40px;
+    grid-template-columns: auto auto;
     padding: 8px 10px;
     gap: 8px;
     height: auto;
@@ -1512,12 +1534,17 @@ textarea {
     font-size: 11px;
   }
 
+  .channel-button {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
   /* Sidebar - Mobile slide-in */
   .sidebar {
     display: flex;
     position: fixed;
     left: 0;
-    top: 60px;
+    top: 72px;
     bottom: 0;
     width: 80%;
     max-width: 250px;
@@ -1737,13 +1764,28 @@ textarea {
   .user-name {
     display: none;
   }
+
+  .channel-videos-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* Extra Small (Up to 479px) - Small phones */
 @media (max-width: 479px) {
   .header {
-    grid-template-columns: 35px 1fr 35px;
+    grid-template-columns: auto auto;
     padding: 6px 8px;
+  }
+
+  .header-right {
+    gap: 6px;
+  }
+
+  .signin-button,
+  .channel-button {
+    padding: 6px 8px;
+    font-size: 10px;
   }
 
   .header-center {
