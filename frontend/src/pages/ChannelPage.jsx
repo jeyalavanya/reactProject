@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Header from '../components/Header';
 import { videos } from '../data/videos';
 
 export default function ChannelPage() {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
   const [channelName, setChannelName] = useState(user?.channelName || '');
   const [channelDescription, setChannelDescription] = useState(user?.channelDescription || '');
   const [ownedVideos, setOwnedVideos] = useState(() =>
@@ -78,6 +80,7 @@ export default function ChannelPage() {
 
   return (
     <main className="channel-page">
+      <Header onToggleSidebar={() => {}} onSearch={setSearchTerm} searchTerm={searchTerm} />
       <section className="channel-banner">
         <div className="channel-banner-inner">
           <div className="channel-banner-avatar">{channelAvatar}</div>

@@ -18,10 +18,10 @@ export default function Header({ onToggleSidebar, onSearch, searchTerm }) {
           ☰
         </button>
 
-        <div className="brand-wrap">
+        <button type="button" className="brand-wrap" onClick={() => navigate('/') }>
           <span className="brand-logo">▶</span>
           <span className="brand-text">YouTube</span>
-        </div>
+        </button>
       </div>
 
       <div className="header-center">

@@ -81,10 +81,14 @@ input {
 }
 
 .brand-wrap {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   font-weight: 700;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 .brand-logo {
@@ -391,7 +395,8 @@ input {
 }
 
 .channel-banner {
-  padding: 24px 0 0;
+  padding: 36px 0 0;
+  min-height: 280px;
   background: linear-gradient(130deg, #1f1f1f 0%, #101010 45%, #181818 100%);
   border-bottom: 1px solid var(--border);
 }
@@ -401,15 +406,14 @@ input {
   margin: 0 auto;
   padding: 0 24px;
   display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 24px;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
   align-items: center;
 }
 
 .channel-banner-avatar {
-  width: 100%;
-  max-width: 280px;
-  aspect-ratio: 1 / 1;
+  width: 220px;
+  height: 220px;
   display: grid;
   place-items: center;
   font-size: 42px;
@@ -423,6 +427,11 @@ input {
   font-size: clamp(2rem, 2.6vw, 2.4rem);
 }
 
+.channel-banner-info {
+  display: grid;
+  gap: 18px;
+}
+
 .channel-banner-info p {
   margin: 12px 0 18px;
   color: var(--muted);
@@ -430,13 +439,22 @@ input {
   max-width: 760px;
 }
 
+.channel-banner-info .subscribe-button {
+  justify-self: start;
+  padding: 12px 24px;
+}
+
 .channel-manage {
   display: grid;
-  grid-template-columns: 360px 1fr;
   gap: 24px;
   max-width: 1100px;
   margin: 0 auto 40px;
   padding: 24px;
+}
+
+.channel-page {
+  min-height: 100vh;
+  background: var(--bg);
 }
 
 .channel-form {
@@ -559,15 +577,45 @@ input {
     background: rgba(0, 0, 0, 0.5);
     z-index: 25;
   }
-}
 
-.channel-page {
-  min-height: 100vh;
-  background: var(--bg);
+  .channel-banner-inner,
+  .channel-manage,
+  .channel-videos {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
+
+  .channel-banner-inner {
+    gap: 20px;
+    align-items: start;
+  }
+
+  .channel-banner-avatar {
+    max-width: 180px;
+    margin: 0 auto;
+  }
+
+  .channel-banner-info {
+    text-align: left;
+  }
+
+  .channel-video-card {
+    grid-template-columns: 1fr;
+  }
+
+  .channel-video-card img {
+    max-height: 260px;
+  }
+
+  .channel-create-card,
+  .channel-videos-section {
+    margin: 0 16px 24px;
+  }
 }
 
 .channel-banner {
-  height: 220px;
+  padding: 36px 0 0;
+  min-height: 280px;
   background: linear-gradient(130deg, #1f1f1f 0%, #101010 45%, #181818 100%);
   border-bottom: 1px solid var(--border);
 }
