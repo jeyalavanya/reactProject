@@ -4,7 +4,6 @@ import { videos } from '../data/videos';
 import CommentSection from '../components/CommentSection';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
-import client from '../api/client';
 import { useAuth } from '../context/AuthContext';
 
 const VideoDetailPage = () => {
@@ -36,13 +35,11 @@ const VideoDetailPage = () => {
   }, []);
 
   useEffect(() => {
-    // Find video from static data
     const foundVideo = videos.find(v => v.id === videoId);
     if (foundVideo) {
       setVideo(foundVideo);
-      setLikes(foundVideo.views); // Placeholder for likes
-      setDislikes(Math.floor(foundVideo.views * 0.05)); // Placeholder for dislikes
-      // On mobile, close sidebar when navigating to video
+      setLikes(foundVideo.views);
+      setDislikes(Math.floor(foundVideo.views * 0.05));
       if (isMobile) {
         setSidebarOpen(false);
       }
@@ -94,44 +91,45 @@ const VideoDetailPage = () => {
   }
 
   return (
-    <div className="video-detail-page">
+    <div className="video-detail-page app-shell">
       <Header 
         onToggleSidebar={handleToggleSidebar}
         onSearch={setSearchTerm}
         searchTerm={searchTerm}
       />
+
       <div className="content-layout">
         <Sidebar isOpen={sidebarOpen} />
         {isMobile && sidebarOpen && <div className="sidebar-overlay" onClick={handleCloseSidebar}></div>}
-        <div className="video-detail-container" onClick={handleCloseSidebar}>
-          <div className="video-player-section">
-            <div className="video-player">
-              <img 
-                src={video.thumbnailUrl} 
+
+        <main className="watch-layout" onClick={handleCloseSidebar}>
+          <section className="player-column">
+            <div className="player-wrapper">
+              <img
+                src={video.thumbnailUrl}
                 alt={video.title}
-                className="video-thumbnail-large"
+                className="video-frame"
               />
               <div className="play-button">▶</div>
             </div>
 
             <div className="video-meta">
-              <h1 className="video-title">{video.title}</h1>
-              
-              <div className="video-stats">
-                <div className="channel-info">
-                  <span className="channel-name">{video.channelName}</span>
-                  <span className="view-count">{video.views.toLocaleString()} views</span>
+              <h1>{video.title}</h1>
+              <div className="video-channel-row">
+                <div>
+                  <p className="channel-name">{video.channelName}</p>
+                  <p className="view-count">{video.views.toLocaleString()} views</p>
                 </div>
 
-                <div className="action-buttons">
-                  <button 
-                    className={`like-button ${userLiked ? 'active' : ''}`}
+                <div className="reaction-row">
+                  <button
+                    className={`secondary-btn ${userLiked ? 'active' : ''}`}
                     onClick={handleLike}
                   >
                     👍 {likes}
                   </button>
-                  <button 
-                    className={`dislike-button ${userDisliked ? 'active' : ''}`}
+                  <button
+                    className={`secondary-btn ${userDisliked ? 'active' : ''}`}
                     onClick={handleDislike}
                   >
                     👎 {dislikes}
@@ -140,16 +138,16 @@ const VideoDetailPage = () => {
               </div>
 
               <div className="video-description">
-                <h3>Description</h3>
+                <h2>Description</h2>
                 <p>{video.title} - Learn this topic from scratch!</p>
               </div>
             </div>
-          </div>
 
-          {user && (
-            <CommentSection videoId={videoId} user={user} />
-          )}
-        </div>
+            {user && (
+              <CommentSection videoId={videoId} user={user} />
+            )}
+          </section>
+        </main>
       </div>
     </div>
   );
