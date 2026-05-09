@@ -59,7 +59,8 @@ input {
 .icon-button,
 .sidebar-item,
 .filter-chip,
-.signin-button {
+.signin-button,
+.channel-button {
   border: none;
   cursor: pointer;
 }
@@ -68,6 +69,13 @@ input {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  background: #2a2a2a;
+  color: white;
+}
+
+.channel-button {
+  padding: 10px 18px;
+  border-radius: 999px;
   background: #2a2a2a;
   color: white;
 }
@@ -239,6 +247,219 @@ input {
     z-index: 25;
   }
 }
+
+.channel-page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.channel-banner {
+  height: 220px;
+  background: linear-gradient(130deg, #1f1f1f 0%, #101010 45%, #181818 100%);
+  border-bottom: 1px solid var(--border);
+}
+
+.channel-profile-card {
+  max-width: 1100px;
+  margin: -80px auto 36px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: rgba(24, 24, 24, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.channel-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  font-weight: 700;
+  background: #2a2a2a;
+  color: white;
+  flex-shrink: 0;
+}
+
+.channel-header-text h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+}
+
+.channel-handle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.channel-description {
+  margin: 12px 0 0;
+  color: var(--muted);
+  max-width: 620px;
+}
+
+.subscribe-button,
+.channel-action-button,
+.secondary-button {
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+}
+
+.subscribe-button,
+.channel-action-button {
+  background: var(--accent);
+  color: white;
+}
+
+.secondary-button {
+  background: #2a2a2a;
+  color: white;
+}
+
+.channel-create-card,
+.channel-videos-section {
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  padding: 24px;
+  background: #141414;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.channel-create-card h2,
+.channel-videos-header h2 {
+  margin: 0 0 12px;
+}
+
+.channel-create-card p {
+  margin: 0 0 18px;
+  color: var(--muted);
+}
+
+.channel-create-form {
+  display: grid;
+  gap: 14px;
+}
+
+.channel-create-form label {
+  color: white;
+  font-size: 14px;
+}
+
+.channel-create-form input,
+.channel-create-form textarea {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #191919;
+  color: white;
+}
+
+.channel-videos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.channel-no-videos {
+  padding: 32px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.channel-video-list {
+  display: grid;
+  gap: 18px;
+}
+
+.channel-video-item {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 18px;
+  padding: 18px;
+  background: #181818;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.channel-video-item img {
+  width: 100%;
+  height: 145px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.channel-video-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.channel-video-meta h3 {
+  margin: 0 0 10px;
+}
+
+.channel-video-meta p,
+.channel-video-meta span {
+  margin: 0;
+  color: var(--muted);
+}
+
+.channel-video-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.channel-video-actions button {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #2a2a2a;
+  color: white;
+  cursor: pointer;
+}
+
+.delete-button {
+  background: #b71c1c;
+}
+
+.video-edit-form {
+  display: grid;
+  gap: 14px;
+}
+
+.video-edit-form input {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #191919;
+  color: white;
+}
+
+@media (max-width: 900px) {
+  .channel-profile-card,
+  .channel-create-card,
+  .channel-videos-section {
+    margin: 0 16px 24px;
+  }
+
+  .channel-profile-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .channel-video-item {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 .user-name {
   color: #ffffff;

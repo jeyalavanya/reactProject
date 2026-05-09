@@ -36,6 +36,9 @@ export default function Header({ onToggleSidebar, onSearch, searchTerm }) {
       <div className="header-right">
         {user ? (
           <>
+            <button className="channel-button" onClick={() => navigate('/channel')}>
+              My Channel
+            </button>
             <span className="user-name">{user.username}</span>
             <button className="signin-button" onClick={logout}>Logout</button>
           </>
