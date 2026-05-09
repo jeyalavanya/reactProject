@@ -1,20 +1,34 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
-import { videos } from '../data/videos';
+import api from '../api/client';
 
 export default function ChannelPage() {
   const { user, setUser } = useAuth();
+  const { channelId } = useParams();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [channelName, setChannelName] = useState(user?.channelName || '');
-  const [channelDescription, setChannelDescription] = useState(user?.channelDescription || '');
-  const [ownedVideos, setOwnedVideos] = useState(() =>
-    user?.channelName ? videos.filter((video) => video.channelName === user.channelName) : []
-  );
-  const [editingId, setEditingId] = useState(null);
-  const [editFields, setEditFields] = useState({ title: '', category: '', thumbnailUrl: '' });
+  const [channel, setChannel] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [channelName, setChannelName] = useState('');
+  const [channelDescription, setChannelDescription] = useState('');
+  const [editingId, setEditingId] = useState('');
+  const [editFields, setEditFields] = useState({
+    title: '',
+    category: '',
+    thumbnailUrl: '',
+    videoUrl: '',
+    description: ''
+  });
+  const [uploadForm, setUploadForm] = useState({
+    title: '',
+    category: 'General',
+    thumbnailUrl: '',
+    videoUrl: '',
+    description: ''
+  });
 
   useEffect(() => {
     if (!user) {
@@ -22,74 +36,139 @@ export default function ChannelPage() {
       return;
     }
 
-    if (user.channelName) {
-      setChannelName(user.channelName);
-      setChannelDescription(user.channelDescription || '');
-      setOwnedVideos(videos.filter((video) => video.channelName === user.channelName));
-    }
-  }, [user, navigate]);
-
-  const channelCreated = Boolean(user?.channelName);
-
-  const handleCreateChannel = (e) => {
-    e.preventDefault();
-    if (!channelName.trim()) {
-      return;
-    }
-
-    const updatedUser = {
-      ...user,
-      channelName: channelName.trim(),
-      channelDescription: channelDescription.trim() || 'Welcome to my channel!'
+    const fetchChannel = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const endpoint = channelId === 'me' ? '/channels/me' : `/channels/${channelId}`;
+        const response = await api.get(endpoint);
+        setChannel(response.data);
+      } catch (err) {
+        if (channelId === 'me' && err.response?.status === 404) {
+          setChannel(null);
+        } else {
+          setError(err.response?.data?.message || 'Unable to load channel');
+        }
+      } finally {
+        setLoading(false);
+      }
     };
 
-    setUser(updatedUser);
+    fetchChannel();
+  }, [user, channelId, navigate]);
+
+  const channelCreated = Boolean(channel?._id);
+  const isOwner = channel ? channel.owner === user?._id : channelId === 'me';
+
+  const visibleVideos = useMemo(() => {
+    if (!channel?.videos) {
+      return [];
+    }
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) {
+      return channel.videos;
+    }
+    return channel.videos.filter((video) => video.title.toLowerCase().includes(term));
+  }, [channel, searchTerm]);
+
+  const handleCreateChannel = async (e) => {
+    e.preventDefault();
+    if (!channelName.trim()) return;
+
+    try {
+      const response = await api.post('/channels', {
+        channelName: channelName.trim(),
+        description: channelDescription.trim()
+      });
+      setChannel(response.data);
+      setUser({ ...user, channelId: response.data._id });
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to create channel');
+    }
   };
 
   const handleVerifyEdit = (video) => {
-    setEditingId(video.id);
+    setEditingId(video._id);
     setEditFields({
       title: video.title,
       category: video.category,
-      thumbnailUrl: video.thumbnailUrl
+      thumbnailUrl: video.thumbnailUrl,
+      videoUrl: video.videoUrl,
+      description: video.description || ''
     });
   };
 
-  const handleSaveEdit = (videoId) => {
-    setOwnedVideos((prevVideos) =>
-      prevVideos.map((video) =>
-        video.id === videoId ? { ...video, ...editFields } : video
-      )
-    );
-    setEditingId(null);
+  const refreshOwnChannel = async () => {
+    const response = await api.get('/channels/me');
+    setChannel(response.data);
+  };
+
+  const handleSaveEdit = async (videoId) => {
+    try {
+      await api.put(`/videos/${videoId}`, editFields);
+      await refreshOwnChannel();
+      setEditingId('');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to update video');
+    }
   };
 
   const handleCancelEdit = () => {
-    setEditingId(null);
+    setEditingId('');
   };
 
-  const handleDeleteVideo = (videoId) => {
+  const handleDeleteVideo = async (videoId) => {
     if (!window.confirm('Delete this video from your channel?')) {
       return;
     }
-    setOwnedVideos((prevVideos) => prevVideos.filter((video) => video.id !== videoId));
+
+    try {
+      await api.delete(`/videos/${videoId}`);
+      await refreshOwnChannel();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to delete video');
+    }
   };
 
-  const channelAvatar = user?.username?.charAt(0).toUpperCase() || 'U';
+  const handleUploadVideo = async (e) => {
+    e.preventDefault();
+    if (!channel?._id) return;
+
+    try {
+      await api.post('/videos', { ...uploadForm, channelId: channel._id });
+      await refreshOwnChannel();
+      setUploadForm({
+        title: '',
+        category: 'General',
+        thumbnailUrl: '',
+        videoUrl: '',
+        description: ''
+      });
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to upload video');
+    }
+  };
+
+  const channelAvatar = (channel?.channelName || user?.username || 'U').charAt(0).toUpperCase();
   const channelHandle = `@${user?.username?.replace(/\s+/g, '').toLowerCase()}`;
+
+  if (loading) {
+    return <main className="channel-page"><p>Loading channel...</p></main>;
+  }
 
   return (
     <main className="channel-page">
       <Header onToggleSidebar={() => {}} onSearch={setSearchTerm} searchTerm={searchTerm} />
+      {error && <p className="error-text">{error}</p>}
       <section className="channel-banner">
         <div className="channel-banner-inner">
           <div className="channel-banner-avatar">{channelAvatar}</div>
           <div className="channel-banner-info">
-            <h1>{channelCreated ? channelName : `${user?.username}'s Channel`}</h1>
+            <h1>{channelCreated ? channel.channelName : `${user?.username}'s Channel`}</h1>
             <p className="channel-handle">{channelHandle}</p>
             <p className="channel-description">
               {channelCreated
-                ? channelDescription || 'Welcome to my channel!'
+                ? channel.description || 'Welcome to my channel!'
                 : 'Create your channel to share videos and manage content.'}
             </p>
             <button className="subscribe-button">Subscribe</button>
@@ -128,32 +207,66 @@ export default function ChannelPage() {
         </section>
       ) : (
         <section className="channel-manage">
+          {isOwner && (
+            <form className="channel-create-form channel-upload-form" onSubmit={handleUploadVideo}>
+              <h2>Upload Video</h2>
+              <input
+                placeholder="Video title"
+                value={uploadForm.title}
+                onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })}
+                required
+              />
+              <input
+                placeholder="Category"
+                value={uploadForm.category}
+                onChange={(e) => setUploadForm({ ...uploadForm, category: e.target.value })}
+              />
+              <input
+                placeholder="Thumbnail URL"
+                value={uploadForm.thumbnailUrl}
+                onChange={(e) => setUploadForm({ ...uploadForm, thumbnailUrl: e.target.value })}
+              />
+              <input
+                placeholder="Video URL (embed URL)"
+                value={uploadForm.videoUrl}
+                onChange={(e) => setUploadForm({ ...uploadForm, videoUrl: e.target.value })}
+              />
+              <textarea
+                placeholder="Description"
+                rows="3"
+                value={uploadForm.description}
+                onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })}
+              />
+              <button type="submit" className="channel-action-button">Upload</button>
+            </form>
+          )}
+
           <div className="channel-videos-section">
             <div className="channel-videos-header">
               <div>
-                <h2>{ownedVideos.length} Videos</h2>
+                <h2>{visibleVideos.length} Videos</h2>
                 <p>Videos uploaded to your channel.</p>
               </div>
             </div>
 
-            {ownedVideos.length === 0 ? (
+            {visibleVideos.length === 0 ? (
               <div className="channel-no-videos">
                 <p>No videos found for this channel.</p>
-                <p>You can still edit or delete videos once they are added to your channel.</p>
+                <p>Upload videos to display them here.</p>
               </div>
             ) : (
               <div className="channel-videos">
-                {ownedVideos.map((video) => (
-                  <article key={video.id} className="channel-video-card">
+                {visibleVideos.map((video) => (
+                  <article key={video._id} className="channel-video-card">
                     <img src={video.thumbnailUrl} alt={video.title} />
 
                     <div>
-                      {editingId === video.id ? (
+                      {editingId === video._id ? (
                         <form
                           className="video-edit-form"
                           onSubmit={(e) => {
                             e.preventDefault();
-                            handleSaveEdit(video.id);
+                            handleSaveEdit(video._id);
                           }}
                         >
                           <label>Title</label>
@@ -171,6 +284,17 @@ export default function ChannelPage() {
                             value={editFields.thumbnailUrl}
                             onChange={(e) => setEditFields({ ...editFields, thumbnailUrl: e.target.value })}
                           />
+                          <label>Video URL</label>
+                          <input
+                            value={editFields.videoUrl}
+                            onChange={(e) => setEditFields({ ...editFields, videoUrl: e.target.value })}
+                          />
+                          <label>Description</label>
+                          <textarea
+                            rows="3"
+                            value={editFields.description}
+                            onChange={(e) => setEditFields({ ...editFields, description: e.target.value })}
+                          />
                           <div className="channel-video-actions">
                             <button type="button" className="secondary-button" onClick={handleCancelEdit}>
                               Cancel
@@ -185,16 +309,18 @@ export default function ChannelPage() {
                           <div className="channel-video-meta">
                             <h3>{video.title}</h3>
                             <p>{video.category}</p>
-                            <span>{video.views.toLocaleString()} views</span>
+                            <span>{(video.views || 0).toLocaleString()} views</span>
                           </div>
-                          <div className="channel-video-actions">
-                            <button type="button" onClick={() => handleVerifyEdit(video)}>
-                              Edit
-                            </button>
-                            <button type="button" className="delete-button" onClick={() => handleDeleteVideo(video.id)}>
-                              Delete
-                            </button>
-                          </div>
+                          {isOwner && (
+                            <div className="channel-video-actions">
+                              <button type="button" onClick={() => handleVerifyEdit(video)}>
+                                Edit
+                              </button>
+                              <button type="button" className="delete-button" onClick={() => handleDeleteVideo(video._id)}>
+                                Delete
+                              </button>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
