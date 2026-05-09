@@ -105,12 +105,12 @@ const VideoDetailPage = () => {
         <main className="watch-layout" onClick={handleCloseSidebar}>
           <section className="player-column">
             <div className="player-wrapper">
-              <img
-                src={video.thumbnailUrl}
-                alt={video.title}
-                className="video-frame"
+              <iframe
+                src={video.videoUrl}
+                title={video.title}
+                allowFullScreen
+                frameBorder="0"
               />
-              <div className="play-button">▶</div>
             </div>
 
             <div className="video-meta">
