@@ -7,6 +7,34 @@ import Sidebar from '../components/Sidebar';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
 
+const getYouTubeEmbedUrl = (url = '') => {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace('www.', '').toLowerCase();
+
+    if (host === 'youtu.be') {
+      const id = parsed.pathname.replace('/', '').trim();
+      return id ? `https://www.youtube.com/embed/${id}` : url;
+    }
+
+    if (host === 'youtube.com' || host === 'm.youtube.com') {
+      if (parsed.pathname === '/watch') {
+        const id = parsed.searchParams.get('v');
+        return id ? `https://www.youtube.com/embed/${id}` : url;
+      }
+
+      if (parsed.pathname.startsWith('/shorts/')) {
+        const id = parsed.pathname.split('/')[2];
+        return id ? `https://www.youtube.com/embed/${id}` : url;
+      }
+    }
+  } catch (error) {
+    return url;
+  }
+
+  return url;
+};
+
 const VideoDetailPage = () => {
   const { videoId } = useParams();
   const navigate = useNavigate();
@@ -122,6 +150,8 @@ const VideoDetailPage = () => {
     return <div>Loading...</div>;
   }
 
+  const playableVideoUrl = getYouTubeEmbedUrl(video.videoUrl);
+
   return (
     <div className="video-detail-page app-shell">
       <Header 
@@ -138,7 +168,7 @@ const VideoDetailPage = () => {
           <section className="player-column">
             <div className="player-wrapper">
               <iframe
-                src={video.videoUrl}
+                src={playableVideoUrl}
                 title={video.title}
                 allowFullScreen
                 frameBorder="0"

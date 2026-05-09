@@ -2,6 +2,49 @@ import Video from '../models/Video.js';
 import Channel from '../models/Channel.js';
 import Comment from '../models/Comment.js';
 
+function extractYouTubeId(rawUrl = '') {
+  try {
+    const parsed = new URL(rawUrl);
+    const host = parsed.hostname.replace('www.', '').toLowerCase();
+
+    if (host === 'youtu.be') {
+      return parsed.pathname.replace('/', '').trim();
+    }
+
+    if (host === 'youtube.com' || host === 'm.youtube.com') {
+      if (parsed.pathname === '/watch') {
+        return parsed.searchParams.get('v');
+      }
+
+      if (parsed.pathname.startsWith('/shorts/')) {
+        return parsed.pathname.split('/')[2];
+      }
+
+      if (parsed.pathname.startsWith('/embed/')) {
+        return parsed.pathname.split('/')[2];
+      }
+    }
+  } catch (error) {
+    return '';
+  }
+
+  return '';
+}
+
+function normalizeVideoUrl(rawUrl = '') {
+  const trimmed = (rawUrl || '').trim();
+  if (!trimmed) {
+    return 'https://www.youtube.com/embed/w7ejDZ8SWv8';
+  }
+
+  const youtubeId = extractYouTubeId(trimmed);
+  if (youtubeId) {
+    return `https://www.youtube.com/embed/${youtubeId}`;
+  }
+
+  return trimmed;
+}
+
 export async function getVideos(req, res) {
   try {
     const videos = await Video.find().sort({ createdAt: -1 });
@@ -50,7 +93,7 @@ export async function createVideo(req, res) {
       description: description?.trim() || '',
       category: category?.trim() || 'General',
       thumbnailUrl: thumbnailUrl?.trim() || 'https://via.placeholder.com/320x180?text=Thumbnail',
-      videoUrl: videoUrl?.trim() || 'https://www.youtube.com/embed/w7ejDZ8SWv8',
+      videoUrl: normalizeVideoUrl(videoUrl),
       channelId,
       uploader: req.user._id,
       channelName: channel.channelName
@@ -72,7 +115,12 @@ export async function updateVideo(req, res) {
       return res.status(403).json({ message: 'Not allowed' });
     }
 
-    Object.assign(video, req.body);
+    const nextData = { ...req.body };
+    if (Object.prototype.hasOwnProperty.call(nextData, 'videoUrl')) {
+      nextData.videoUrl = normalizeVideoUrl(nextData.videoUrl);
+    }
+
+    Object.assign(video, nextData);
     await video.save();
 
     res.json(video);
