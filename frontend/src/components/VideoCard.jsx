@@ -5,7 +5,7 @@ export default function VideoCard({ video, onVideoClick }) {
 
   const handleClick = () => {
     if (onVideoClick) onVideoClick();
-    navigate(`/video/${video.id}`);
+    navigate(`/video/${video._id || video.id}`);
   };
 
   return (

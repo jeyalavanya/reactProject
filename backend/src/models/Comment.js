@@ -1,27 +1,27 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema(
   {
     videoId: {
       type: String,
-      required: true
+      required: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
+      ref: "User",
+      required: true,
     },
     username: {
       type: String,
-      required: true
+      required: true,
     },
     text: {
       type: String,
       required: true,
-      trim: true
-    }
+      trim: true,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export default mongoose.model('Comment', commentSchema);
+export default mongoose.model("Comment", commentSchema);

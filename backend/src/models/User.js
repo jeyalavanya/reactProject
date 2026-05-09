@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
@@ -7,37 +7,39 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 3
+      minlength: 3,
     },
     email: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
     },
     password: {
       type: String,
-      required: true
+      required: true,
     },
     avatar: {
       type: String,
-      default: 'https://example.com/avatar/default.png'
+      default: "https://i.pravatar.cc/150?img=12",
     },
-    channels: {
-      type: [String],
-      default: []
-    }
+    channels: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Channel",
+      },
+    ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Hash password before saving only if modified
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
     return next();
   }
-  
+
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -48,8 +50,8 @@ userSchema.pre('save', async function(next) {
 });
 
 // Method to compare passwords
-userSchema.methods.matchPassword = async function(enteredPassword) {
+userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model("User", userSchema);
