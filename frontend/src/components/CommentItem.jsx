@@ -5,7 +5,7 @@ const CommentItem = ({ comment, currentUserId, onDelete, onUpdate }) => {
   const [editText, setEditText] = useState(comment.text);
   const [isSaving, setIsSaving] = useState(false);
 
-  const isOwner = comment.userId === currentUserId;
+  const isOwner = String(comment.userId) === String(currentUserId);
 
   const handleSaveEdit = async () => {
     if (!editText.trim()) {

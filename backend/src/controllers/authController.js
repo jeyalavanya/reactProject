@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import validator from "validator";
 import User from "../models/User.js";
 import Channel from "../models/Channel.js";
@@ -19,8 +18,7 @@ export async function register(req, res) {
   const exists = await User.findOne({ email });
   if (exists)
     return res.status(409).json({ message: "Email already registered" });
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ username, email, password: hashedPassword });
+  const user = await User.create({ username, email, password });
   const channel = await Channel.create({
     channelName: `${username}'s Channel`,
     owner: user._id,
@@ -38,7 +36,7 @@ export async function login(req, res) {
   const user = await User.findOne({ email }).populate("channels");
   if (!user)
     return res.status(401).json({ message: "Invalid email or password" });
-  const matches = await bcrypt.compare(password, user.password);
+  const matches = await user.matchPassword(password);
   if (!matches)
     return res.status(401).json({ message: "Invalid email or password" });
   const token = generateToken(user);

@@ -5,6 +5,7 @@ import CommentSection from '../components/CommentSection';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import { useAuth } from '../context/AuthContext';
+import api from '../api/client';
 
 const VideoDetailPage = () => {
   const { videoId } = useParams();
@@ -35,17 +36,30 @@ const VideoDetailPage = () => {
   }, []);
 
   useEffect(() => {
-    const foundVideo = videos.find(v => v.id === videoId);
-    if (foundVideo) {
-      setVideo(foundVideo);
-      setLikes(foundVideo.views);
-      setDislikes(Math.floor(foundVideo.views * 0.05));
+    const fetchVideo = async () => {
+      try {
+        const response = await api.get(`/videos/${videoId}`);
+        const fetchedVideo = response.data;
+        setVideo(fetchedVideo);
+        setLikes(fetchedVideo.likes || 0);
+        setDislikes(fetchedVideo.dislikes || 0);
+      } catch (error) {
+        const foundVideo = videos.find(v => v.id === videoId);
+        if (foundVideo) {
+          setVideo(foundVideo);
+          setLikes(foundVideo.likes || foundVideo.views);
+          setDislikes(foundVideo.dislikes || Math.floor(foundVideo.views * 0.05));
+        } else {
+          navigate('/');
+        }
+      }
+
       if (isMobile) {
         setSidebarOpen(false);
       }
-    } else {
-      navigate('/');
-    }
+    };
+
+    fetchVideo();
   }, [videoId, navigate, isMobile]);
 
   const handleToggleSidebar = () => {
@@ -59,6 +73,11 @@ const VideoDetailPage = () => {
   };
 
   const handleLike = () => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+
     if (!userLiked) {
       setLikes(likes + 1);
       if (userDisliked) {
@@ -70,9 +89,18 @@ const VideoDetailPage = () => {
       setLikes(likes - 1);
       setUserLiked(false);
     }
+
+    if (video?._id) {
+      api.patch(`/videos/${video._id}/reactions`, { type: 'like' }).catch(() => {});
+    }
   };
 
   const handleDislike = () => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+
     if (!userDisliked) {
       setDislikes(dislikes + 1);
       if (userLiked) {
@@ -83,6 +111,10 @@ const VideoDetailPage = () => {
     } else {
       setDislikes(dislikes - 1);
       setUserDisliked(false);
+    }
+
+    if (video?._id) {
+      api.patch(`/videos/${video._id}/reactions`, { type: 'dislike' }).catch(() => {});
     }
   };
 
@@ -118,7 +150,7 @@ const VideoDetailPage = () => {
               <div className="video-channel-row">
                 <div>
                   <p className="channel-name">{video.channelName}</p>
-                  <p className="view-count">{video.views.toLocaleString()} views</p>
+                  <p className="view-count">{(video.views || 0).toLocaleString()} views</p>
                 </div>
 
                 <div className="reaction-row">
@@ -139,12 +171,14 @@ const VideoDetailPage = () => {
 
               <div className="video-description">
                 <h2>Description</h2>
-                <p>{video.title} - Learn this topic from scratch!</p>
+                <p>{video.description || `${video.title} - Learn this topic from scratch!`}</p>
               </div>
             </div>
 
-            {user && (
-              <CommentSection videoId={videoId} user={user} />
+            {user ? (
+              <CommentSection videoId={video._id || videoId} user={user} />
+            ) : (
+              <p className="no-comments">Sign in to like, dislike, and comment on this video.</p>
             )}
           </section>
         </main>
