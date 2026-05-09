@@ -6,6 +6,9 @@ import Sidebar from '../components/Sidebar';
 import { videos, filters } from '../data/videos';
 import api from '../api/client';
 
+const getVideoIdentity = (video) =>
+  video?._id || video?.id || `${video?.videoUrl || ''}::${video?.title || ''}::${video?.channelName || ''}`;
+
 const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,8 +36,18 @@ const HomePage = () => {
     const fetchVideos = async () => {
       try {
         const response = await api.get('/videos');
-        if (Array.isArray(response.data) && response.data.length) {
-          setVideoList(response.data);
+        if (Array.isArray(response.data)) {
+          const mergedMap = new Map();
+
+          videos.forEach((video) => {
+            mergedMap.set(getVideoIdentity(video), video);
+          });
+
+          response.data.forEach((video) => {
+            mergedMap.set(getVideoIdentity(video), video);
+          });
+
+          setVideoList(Array.from(mergedMap.values()));
         }
       } catch (error) {
         console.error('Failed to fetch videos. Falling back to sample data.', error);
