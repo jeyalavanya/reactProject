@@ -11,7 +11,8 @@ const VideoDetailPage = () => {
   const { videoId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 900);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
   const [video, setVideo] = useState(null);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
@@ -20,16 +21,45 @@ const VideoDetailPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 900;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     // Find video from static data
     const foundVideo = videos.find(v => v.id === videoId);
     if (foundVideo) {
       setVideo(foundVideo);
       setLikes(foundVideo.views); // Placeholder for likes
       setDislikes(Math.floor(foundVideo.views * 0.05)); // Placeholder for dislikes
+      // On mobile, close sidebar when navigating to video
+      if (isMobile) {
+        setSidebarOpen(false);
+      }
     } else {
       navigate('/');
     }
-  }, [videoId, navigate]);
+  }, [videoId, navigate, isMobile]);
+
+  const handleToggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleCloseSidebar = () => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  };
 
   const handleLike = () => {
     if (!userLiked) {
@@ -66,13 +96,14 @@ const VideoDetailPage = () => {
   return (
     <div className="video-detail-page">
       <Header 
-        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        onToggleSidebar={handleToggleSidebar}
         onSearch={setSearchTerm}
         searchTerm={searchTerm}
       />
       <div className="content-layout">
         <Sidebar isOpen={sidebarOpen} />
-        <div className="video-detail-container">
+        {isMobile && sidebarOpen && <div className="sidebar-overlay" onClick={handleCloseSidebar}></div>}
+        <div className="video-detail-container" onClick={handleCloseSidebar}>
           <div className="video-player-section">
             <div className="video-player">
               <img 

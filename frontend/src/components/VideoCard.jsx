@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
-export default function VideoCard({ video }) {
+export default function VideoCard({ video, onVideoClick }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    if (onVideoClick) onVideoClick();
     navigate(`/video/${video.id}`);
   };
 

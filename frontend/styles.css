@@ -29,6 +29,7 @@ input {
   top: 0;
   z-index: 20;
   display: grid;
+  grid-template-areas: "left center right";
   grid-template-columns: 220px 1fr 160px;
   align-items: center;
   gap: 16px;
@@ -37,8 +38,19 @@ input {
   border-bottom: 1px solid var(--border);
 }
 
-.header-left,
+.header-left {
+  grid-area: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-center {
+  grid-area: center;
+}
+
 .header-right {
+  grid-area: right;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -109,6 +121,8 @@ input {
   width: 0;
   min-width: 0;
   border-right: none;
+  flex: 0 0 0;
+  overflow: hidden;
 }
 
 .sidebar-item {
@@ -202,7 +216,9 @@ input {
 
 @media (max-width: 900px) {
   .header {
-    grid-template-columns: 1fr;
+    grid-template-areas: "left right" "center center";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
   }
 
   .sidebar {
@@ -211,6 +227,16 @@ input {
     top: 73px;
     bottom: 0;
     z-index: 30;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 73px;
+    left: 230px;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 25;
   }
 }
 

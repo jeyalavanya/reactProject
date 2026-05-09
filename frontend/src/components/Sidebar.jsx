@@ -2,7 +2,7 @@ const menuItems = ['Home', 'Shorts', 'Subscriptions', 'Library', 'History', 'Lik
 
 export default function Sidebar({ isOpen }) {
   return (
-    <aside className={`sidebar ${isOpen ? '' : 'sidebar-hidden'}`}>
+    <aside className={`sidebar ${isOpen ? '' : 'sidebar-hidden'}`} onClick={(e) => e.stopPropagation()}>
       {menuItems.map((item) => (
         <button key={item} className="sidebar-item">{item}</button>
       ))}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Header from '../components/Header';
 import FilterBar from '../components/FilterBar';
 import VideoCard from '../components/VideoCard';
@@ -8,7 +8,33 @@ import { videos, filters } from '../data/videos';
 const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 900);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 900;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setSidebarOpen(true); // Always open on desktop
+      } else {
+        setSidebarOpen(false); // Hidden on mobile
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleToggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleCloseSidebar = () => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  };
 
   // Filter videos by category and search term
   const filteredVideos = useMemo(() => {
@@ -34,13 +60,14 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <Header 
-        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        onToggleSidebar={handleToggleSidebar}
         onSearch={setSearchTerm}
         searchTerm={searchTerm}
       />
       <div className="content-layout">
         <Sidebar isOpen={sidebarOpen} />
-        <div className="main-content">
+        {isMobile && sidebarOpen && <div className="sidebar-overlay" onClick={handleCloseSidebar}></div>}
+        <div className="main-content" onClick={handleCloseSidebar}>
           <FilterBar 
             filters={filters} 
             activeFilter={selectedCategory} 
@@ -49,7 +76,7 @@ const HomePage = () => {
           <div className="video-grid">
             {filteredVideos.length > 0 ? (
               filteredVideos.map(video => (
-                <VideoCard key={video.id} video={video} />
+                <VideoCard key={video.id} video={video} onVideoClick={handleCloseSidebar} />
               ))
             ) : (
               <div className="no-results">
