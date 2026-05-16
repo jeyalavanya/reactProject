@@ -8,11 +8,11 @@
   <img src="https://img.shields.io/badge/Responsive-UI-orange?style=flat&logo=css3&logoColor=white" alt="Responsive UI">
 </div>
 
-A full-stack YouTube-inspired web application built using React, Node.js, Express, MongoDB, and JWT authentication. The project demonstrates frontend and backend integration, route protection, user authentication, responsive design, and practical MERN-style application structure for portfolio and GitHub showcase purposes.[cite:307][cite:308]
+A full-stack YouTube-inspired web application built using React, Node.js, Express, MongoDB, and JWT authentication. The project demonstrates frontend and backend integration, route protection, user authentication, responsive design, and practical MERN-style application structure for portfolio and GitHub showcase purposes.
 
 ## Overview
 
-This project recreates core user-facing patterns of a video platform interface while focusing on authentication flow and full-stack connectivity. It is designed as a practical learning and showcase project to demonstrate skills in React-based UI development, backend API creation, MongoDB integration, and secure login/signup implementation.[cite:307][cite:313]
+This project recreates core user-facing patterns of a video platform interface while focusing on authentication flow and full-stack connectivity. It is designed as a practical learning and showcase project to demonstrate skills in React-based UI development, backend API creation, MongoDB integration, and secure login/signup implementation.
 
 ## Features
 
@@ -62,7 +62,7 @@ reactProject/
 
 ## Authentication Flow
 
-The backend uses JWT to authenticate users after successful login. User credentials are validated, and the server issues a token that can be used to access protected routes. MongoDB stores the user records, while the frontend interacts with backend API endpoints to complete signup and login operations.[cite:313]
+The backend uses JWT to authenticate users after successful login. User credentials are validated, and the server issues a token that can be used to access protected routes. MongoDB stores the user records, while the frontend interacts with backend API endpoints to complete signup and login operations.
 
 ## Environment Variables
 
@@ -143,7 +143,7 @@ This project helps demonstrate:
 
 ## UI and UX Notes
 
-The interface is designed to be responsive and visually similar to a modern video browsing platform. The project can be extended with search, recommendations, video cards, channel pages, comments, likes, and watch-page functionality to make it more production-like.[cite:307][cite:310]
+The interface is designed to be responsive and visually similar to a modern video browsing platform. The project can be extended with search, recommendations, video cards, channel pages, comments, likes, and watch-page functionality to make it more production-like.
 
 
 ## Troubleshooting
